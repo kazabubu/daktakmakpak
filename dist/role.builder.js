@@ -8,9 +8,8 @@ var roleBuilder = {
 
         const STATE = {
             HARVEST: 'Harvest',
-            UPGRADE: 'Upgrade',
             DIEING: 'Dieing',
-            BUILDER: 'BUILDER'
+            BUILD: 'BUILD'
         };
 
         const DEFAULT_STATE = STATE.HARVEST;
@@ -34,24 +33,36 @@ var roleBuilder = {
             }
         }
 
-        if(creep.carry.energy < creep.carryCapacity) {
+        if (typeof creep.memory.currentState == 'undefined')
+        {
+            creep.memory.currentState = STATE.HARVEST;
+        }
+
+        var prevPos = creep.memory.prevPos;
+        creep.memory.prevPos = creep.pos;
+        if (prevPos == creep.pos)
+        {
+            creep.memory.currentPath = null;
+        }
+
+        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
             var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
+            if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[1]);
             }
         }
-        else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_TOWER) && structure;
+        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.BUILD) {
+            creep.memory.currentState = STATE.BUILD;
+            var target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            if(target) {
+                if(creep.build(target) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target);
                 }
-            });
-            if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
-                }
+            }
+
+            if (creep.carry.energy == 0)
+            {
+                creep.memory.currentState = STATE.HARVEST;
             }
         }
     }
