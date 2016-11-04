@@ -18,7 +18,7 @@ var roleUpgrader = {
         else if (creep.carry.energy == creep.carryCapacity) {
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 if (typeof variable == 'undefined') {
-                    creep.memory.currentPath = creep.findPath(creep.room.controller);
+                    creep.memory.currentPath = creep.room.findPath(creep.pos ,creep.room.controller.pos);
                 }
                 creep.moveByPath(creep.memory.currentPath);
             }
