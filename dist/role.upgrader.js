@@ -3,12 +3,12 @@ var roleUpgrader = {
     /** @param {Creep} creep **/
     run: function(creep) {
         const STATE = {
-            HARVEST: 'Harvest',
             UPGRADE: 'Upgrade',
-            DIEING: 'Dieing'
+            DIEING: 'Dieing',
+            TRANSFER: 'TRANSFER'
         };
 
-        const DEFAULT_STATE = STATE.HARVEST;
+        const DEFAULT_STATE = STATE.TRANSFER;
 
         if (creep.ticksToLive < 100)
         {
@@ -33,7 +33,7 @@ var roleUpgrader = {
 
         if (typeof creep.memory.currentState == 'undefined')
         {
-            creep.memory.currentState = STATE.HARVEST;
+            creep.memory.currentState = DEFAULT_STATE;
         }
 
         var prevPos = creep.memory.prevPos;
@@ -57,7 +57,7 @@ var roleUpgrader = {
             creep.memory.prevPos = null;
         }
 
-        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
+        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION ||
@@ -82,7 +82,7 @@ var roleUpgrader = {
 
             if (creep.carry.energy == 0)
             {
-                creep.memory.currentState = STATE.HARVEST;
+                creep.memory.currentState = STATE.TRANSFER;
             }
         }
 

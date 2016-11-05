@@ -59,7 +59,9 @@ var roleHarvester = {
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
-            var source = Game.getObjectById(creep.memory.currentSource);
+            if (creep.memory.currentSource) {
+                var source = Game.getObjectById(creep.memory.currentSource);
+            }
             if (!creep.memory.currentSource) {
                 var sources = creep.room.find(FIND_SOURCES);
                 if (sources) {
@@ -95,6 +97,9 @@ var roleHarvester = {
             if (creep.carry.energy == 0)
             {
                 creep.memory.currentState = STATE.HARVEST;
+                creep.memory.currentPath = null;
+                creep.memory.currentSource = null;
+                creep.memory.prevPos = null;
             }
         }
     }
