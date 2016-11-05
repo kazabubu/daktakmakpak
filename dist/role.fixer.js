@@ -9,7 +9,6 @@ var roleBuilder = {
         const STATE = {
             HARVEST: 'Harvest',
             DIEING: 'Dieing',
-            BUILD: 'BUILD',
             FIX: 'FIX'
         };
 
@@ -75,37 +74,27 @@ var roleBuilder = {
                     creep.moveTo(targets[0]);
                 }
         }
-        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.BUILD) {
-            creep.memory.currentState = STATE.BUILD;
-            var target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-            if(target) {
-                if(creep.build(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target);
+        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.FIX) {
+            creep.memory.currentState = STATE.FIX;
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.hits <= (structure.hitsMax / 2) ||
+                        structure.structureType == STRUCTURE_SPAWN ||
+                        structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
                 }
-            }
-            else {
-                creep.memory.currentState == STATE.FIX;
+            });
+            if(targets.length > 0) {
+                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0]);
+                }
             }
 
             if (creep.carry.energy == 0)
             {
                 creep.memory.currentState = STATE.HARVEST;
-            }
-        }
-        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.FIX) {
-            creep.memory.currentState = STATE.FIX;
-            var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.hits <= (structure.hitsMax * 0.15))
-                }
-            });
-            if(target) {
-                if(creep.repair(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target);
-                }
-            }
-            else {
-                creep.memory.currentState = STATE.BUILD;
+                creep.memory.currentPath = null;
+                creep.memory.currentSource = null;
+                creep.memory.prevPos = null;
             }
         }
     }
