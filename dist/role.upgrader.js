@@ -37,7 +37,9 @@ var roleUpgrader = {
         }
 
         var prevPos = creep.memory.prevPos;
-        creep.memory.prevPos = {};
+        if (!creep.memory.prevPos){
+            creep.memory.prevPos = {};
+        }
         creep.memory.prevPos.x = creep.pos.x;
         creep.memory.prevPos.y = creep.pos.y;
 
@@ -49,9 +51,10 @@ var roleUpgrader = {
             creep.memory.prevPos.count += 1;
         }
 
-        if (creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 1)
+        if (prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 1)
         {
             creep.memory.currentPath = null;
+            creep.memory.prevPos = null;
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
