@@ -14,9 +14,11 @@ var roleHarvester = {
         if (creep.ticksToLive < 100)
         {
             creep.memory.currentState = STATE.DIEING;
+            creep.memory.renewCount = 0;
         }
 
         if (creep.memory.currentState == STATE.DIEING){
+            creep.memory.renewCount += 1;
             var spawns = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_SPAWN)}});
@@ -24,7 +26,7 @@ var roleHarvester = {
                 creep.moveTo(spawns[0]);
             }
 
-            if (creep.ticksToLive > 1300)
+            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
             {
                 creep.memory.currentState = DEFAULT_STATE;
             }
