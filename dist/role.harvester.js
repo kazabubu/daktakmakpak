@@ -56,18 +56,42 @@ var roleHarvester = {
             creep.memory.currentPath = null;
             creep.memory.currentSource = null;
             creep.memory.prevPos = null;
+            creep.memory.currentResource = null;
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
             if (creep.memory.currentSource) {
                 var source = Game.getObjectById(creep.memory.currentSource);
             }
-            if (!creep.memory.currentSource) {
-                var sources = creep.room.find(FIND_SOURCES);
-                if (sources) {
-                    creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
+            if (!creep.memory.currentSource && !creep.memory.currentResource) {
+                var droppedResources = creep.room.find(FIND_DROPPED_RESOURCES);
+                if (!!droppedResources) {
+                    creep.memory.currentResource = droppedResources[0].id;
+                }
+                else {
+                    var sources = creep.room.find(FIND_SOURCES);
+                    if (sources) {
+                        creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
+                    }
                 }
             }
+
+            if (!!creep.memory.currentResource){
+                var currentResource = Game.getObjectById(creep.memory.currentResource);
+                if (creep.pickup(currentResource) == ERR_NOT_IN_RANGE) {
+                    if (!creep.memory.currentPath){
+                        creep.memory.currentPath = creep.room.findPath(creep.pos, currentResource.pos);
+                    }
+                    creep.moveByPath(creep.memory.currentPath);
+                }
+                else {
+                    creep.memory.currentResource = null;
+                    creep.memory.currentPath = null;
+                }
+            }
+
+
+
 
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 if (!creep.memory.currentPath){
@@ -81,17 +105,23 @@ var roleHarvester = {
         }
         else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.TRANSFER) {
             creep.memory.currentState = STATE.TRANSFER;
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_CONTAINER ||                      
-                        structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
-                }
-            });
-            if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+            if (!creep.memory.currentTarget) {
+                var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION ||
+                            structure.structureType == STRUCTURE_SPAWN ||
+                           // structure.structureType == STRUCTURE_CONTAINER ||
+                            structure.structureType == STRUCTURE_TOWER) && ((!!structure.energy && structure.energy < structure.energyCapacity) ||
+                            (!!structure.store && structure.store.energy < structure.storeCapacity));
+                    }
+                });
+                creep.memory.currentTarget = targets.length > 0 ? targets[0].id : null;
+            }
+
+            if(!!creep.memory.currentTarget) {
+                var currTarget = Game.getObjectById(creep.memory.currentTarget);
+                if(creep.transfer(currTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(currTarget);
                 }
             }
 
@@ -101,8 +131,25 @@ var roleHarvester = {
                 creep.memory.currentPath = null;
                 creep.memory.currentSource = null;
                 creep.memory.prevPos = null;
+                creep.memory.currentResource = null;
             }
         }
+
+        function getSourceToMine()
+        {
+
+        }
+
+        function setupMiningCount()
+        {
+            if(!Memory.miningCount[creep.room.name])
+            {
+                if (!Memory.miningCount) {
+                    Memory.miningCount = {};
+                }
+            }
+        }
+
     }
 };
 
