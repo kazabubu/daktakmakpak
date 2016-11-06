@@ -60,6 +60,8 @@ var roleHarvester = {
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
+
+
             if (creep.memory.currentSource) {
                 var source = Game.getObjectById(creep.memory.currentSource);
             }
@@ -73,6 +75,7 @@ var roleHarvester = {
                     if (sources) {
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
+                    //creep.memory.currentSource = getSourceToMine(creep);
                 }
             }
 
@@ -139,17 +142,33 @@ var roleHarvester = {
             }
         }
 
-        function getSourceToMine()
+        function getSourceToMine(creep)
         {
-
+            var sourceId = null;
+            setupMiningCount(creep);
+            if (!!Memory.miningCount[creep.room.name]) {
+                var minSource = Memory.miningCount[creep.room.name].reduce(function (a, b) {
+                    return (a.count < b.count ? a : b);
+                });
+                minSource.count++;
+                sourceId = minSource.sourceId;
+            }
+            return sourceId;
         }
 
-        function setupMiningCount()
+        function setupMiningCount(creep)
         {
-            if(!Memory.miningCount[creep.room.name])
+            if(!Memory.miningCount || !Memory.miningCount[creep.room.name])
             {
                 if (!Memory.miningCount) {
                     Memory.miningCount = {};
+                }
+                var sources = creep.room.find(FIND_SOURCES);
+                if (sources) {
+                    Memory.miningCount[creep.room.name] = creep.room.find(FIND_SOURCES).map(source => ({
+                        sourceId: source.id,
+                        count: 0
+                    }));
                 }
             }
         }
