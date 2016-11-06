@@ -2,27 +2,91 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        var prevPos = creep.memory.prevPos;
-        creep.memory.prevPos = creep.pos;
-        if (prevPos == creep.pos)
+        const STATE = {
+            UPGRADE: 'Upgrade',
+            DIEING: 'Dieing',
+            TRANSFER: 'TRANSFER'
+        };
+
+        const DEFAULT_STATE = STATE.TRANSFER;
+
+        if (creep.ticksToLive < 100)
         {
-            creep.memory.currentPath = null;
+            creep.memory.currentState = STATE.DIEING;
+            creep.memory.renewCount = 0;
         }
 
-        if(creep.carry.energy < creep.carryCapacity) {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[1]);
+        if (creep.memory.currentState == STATE.DIEING){
+            creep.memory.renewCount += 1;
+            var spawns = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_SPAWN)}});
+            if (spawns[0].renewCreep(creep) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawns[0]);
+            }
+
+            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
+            {
+                creep.memory.currentState = DEFAULT_STATE;
             }
         }
-        else if (creep.carry.energy == creep.carryCapacity) {
-            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                if (typeof variable == 'undefined') {
-                    creep.memory.currentPath = creep.room.findPath(creep.pos ,creep.room.controller.pos);
+
+        if (typeof creep.memory.currentState == 'undefined')
+        {
+            creep.memory.currentState = DEFAULT_STATE;
+        }
+
+        var prevPos = creep.memory.prevPos;
+        if (!creep.memory.prevPos){
+            creep.memory.prevPos = {};
+        }
+        creep.memory.prevPos.x = creep.pos.x;
+        creep.memory.prevPos.y = creep.pos.y;
+
+        if (!creep.memory.prevPos.count)
+        {
+            creep.memory.prevPos.count = 1;
+        }
+        else {
+            creep.memory.prevPos.count += 1;
+        }
+
+        if (prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 1)
+        {
+            creep.memory.currentPath = null;
+            creep.memory.prevPos = null;
+        }
+
+        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER) {
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_EXTENSION ||
+                    structure.structureType == STRUCTURE_SPAWN
+                    && structure.energy > (structure.energyCapacity * 0.3));
                 }
+            });
+            if (targets && targets.length > 0)
+                if(creep.withdraw(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0]);
+                }
+        }
+        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.UPGRADE) {
+            creep.memory.currentState = STATE.UPGRADE;
+            if (!creep.memory.currentPath) {
+                creep.memory.currentPath = creep.room.findPath(creep.pos ,creep.room.controller.pos);
+            }
+
+            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 creep.moveByPath(creep.memory.currentPath);
             }
+
+            if (creep.carry.energy == 0)
+            {
+                creep.memory.currentState = STATE.TRANSFER;
+            }
         }
+
+
     }
 };
 
