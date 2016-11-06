@@ -65,7 +65,7 @@ var roleHarvester = {
             }
             if (!creep.memory.currentSource && !creep.memory.currentResource) {
                 var droppedResources = creep.room.find(FIND_DROPPED_RESOURCES);
-                if (!!droppedResources) {
+                if (!!droppedResources && droppedResources.length > 0) {
                     creep.memory.currentResource = droppedResources[0].id;
                 }
                 else {
@@ -122,6 +122,10 @@ var roleHarvester = {
                 var currTarget = Game.getObjectById(creep.memory.currentTarget);
                 if(creep.transfer(currTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(currTarget);
+                }
+                else {
+                    creep.memory.currentTarget = null;
+                    creep.memory.currentPath = null;
                 }
             }
 
