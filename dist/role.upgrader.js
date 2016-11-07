@@ -54,8 +54,7 @@ var roleUpgrader = {
         if (prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 1)
         {
             creep.memory.currentPath = null;
-            creep.memory.prevPos = null;
-            creep.memory.currentState = DEFAULT_STATE;
+            creep.memory.prevPos = null;            
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER) {
