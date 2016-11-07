@@ -65,9 +65,12 @@ var roleBuilder = {
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                    structure.structureType == STRUCTURE_SPAWN
-                    && structure.energy > (structure.energyCapacity * 0.3));
+                    return ((structure.structureType == STRUCTURE_EXTENSION ||
+                    structure.structureType == STRUCTURE_SPAWN ||
+                    structure.structureType == STRUCTURE_CONTAINER)
+                    && (!!structure.energy && structure.energy > (structure.energyCapacity * 0.3)) ||
+                        (!!structure.store && structure.store.energy > (structure.storeCapacity * 0.3))
+                    );
                 }
             });
             if (targets && targets.length > 0)
