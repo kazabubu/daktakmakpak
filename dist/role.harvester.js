@@ -133,7 +133,7 @@ var roleHarvester = {
                 }
             }
 
-            if (creep.carry.energy < creep.carry.energyCapacity * 0.2 )
+            if (creep.carry.energy < (creep.carry.energyCapacity * 0.2 ))
             {
                 creep.memory.currentState = STATE.HARVEST;
                 creep.memory.currentPath = null;
