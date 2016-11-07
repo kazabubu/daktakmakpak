@@ -114,8 +114,8 @@ var roleHarvester = {
                         return (structure.structureType == STRUCTURE_EXTENSION ||
                             structure.structureType == STRUCTURE_SPAWN ||
                            // structure.structureType == STRUCTURE_CONTAINER ||
-                            structure.structureType == STRUCTURE_TOWER) && ((!!structure.energy && structure.energy < structure.energyCapacity) ||
-                            (!!structure.store && structure.store.energy < structure.storeCapacity));
+                            structure.structureType == STRUCTURE_TOWER) && ((typeof structure.energy !== 'undefined' && structure.energy < structure.energyCapacity) ||
+                            (typeof structure.store !== 'undefined' && structure.store.energy < structure.storeCapacity));
                     }
                 });
                 creep.memory.currentTarget = targets.length > 0 ? targets[0].id : null;
@@ -132,7 +132,7 @@ var roleHarvester = {
                 }
             }
 
-            if (creep.carry.energy == 0)
+            if (creep.carry.energy < creep.carry.energyCapacity * 0.2 )
             {
                 creep.memory.currentState = STATE.HARVEST;
                 creep.memory.currentPath = null;

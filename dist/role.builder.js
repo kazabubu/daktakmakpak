@@ -88,6 +88,7 @@ var roleBuilder = {
             }
             else {
                 creep.memory.currentState == STATE.FIX;
+                creep.memory.currentTarget = null;
             }
 
             if (creep.carry.energy == 0)
@@ -95,20 +96,35 @@ var roleBuilder = {
                 creep.memory.currentState = STATE.HARVEST;
             }
         }
-        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.FIX) {
+
+        if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.FIX) {
             creep.memory.currentState = STATE.FIX;
-            var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.hits <= (structure.hitsMax * 0.15))
+            if (!creep.memory.currentTarget){
+                var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.hits <= (structure.hitsMax * 0.15))
+                    }
+
+                });
+                creep.memory.curretTarget = target ? target : null;
+            }
+
+            if(creep.memory.currentTarget) {
+                var result = creep.repair(currentTarget);
+                if(result == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(currentTarget);
                 }
-            });
-            if(target) {
-                if(creep.repair(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target);
+                else if(result !== OK){
+                    creep.memory.curretTarget = null;
                 }
             }
             else {
                 creep.memory.currentState = STATE.BUILD;
+            }
+
+            if (creep.carry.energy == 0)
+            {
+                creep.memory.currentState = STATE.HARVEST;
             }
         }
     }
