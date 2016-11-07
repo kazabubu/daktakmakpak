@@ -113,11 +113,19 @@ var roleBuilder = {
 
             if(creep.memory.currentTarget) {
                 var currentTarget = Game.getObjectById(creep.memory.currentTarget);
-                var result = creep.repair(currentTarget);
-                if(result == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(currentTarget);
+                if (currentTarget.hits <= (currentTarget.hitsMax * 0.2))
+                {
+                    var result = creep.repair(currentTarget);
+                    if(result == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(currentTarget);
+                    }
+                    else if(result !== OK){
+                        creep.memory.currentTarget = null;
+                    }
                 }
-                else if(result !== OK){
+                else
+                {
+                    creep.memory.currentState = STATE.BUILD;
                     creep.memory.currentTarget = null;
                 }
             }
