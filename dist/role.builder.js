@@ -60,15 +60,16 @@ var roleBuilder = {
         {
             creep.memory.currentPath = null;
             creep.memory.prevPos = null;
+            creep.memory.currentState = DEFAULT_STATE;
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return ((structure.structureType == STRUCTURE_EXTENSION ||
-                    structure.structureType == STRUCTURE_SPAWN ||
-                    structure.structureType == STRUCTURE_CONTAINER)
-                    && (!!structure.energy && structure.energy > (structure.energyCapacity * 0.3)) ||
+                        structure.structureType == STRUCTURE_SPAWN ||
+                        structure.structureType == STRUCTURE_CONTAINER)
+                        && (!!structure.energy && structure.energy > (structure.energyCapacity * 0.3)) ||
                         (!!structure.store && structure.store.energy > (structure.storeCapacity * 0.3))
                     );
                 }
@@ -81,6 +82,7 @@ var roleBuilder = {
         else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.BUILD) {
             creep.memory.currentState = STATE.BUILD;
             var target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+
             if(target) {
                 if(creep.build(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
@@ -100,22 +102,24 @@ var roleBuilder = {
         if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.FIX) {
             creep.memory.currentState = STATE.FIX;
             if (!creep.memory.currentTarget){
-                var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                var target = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.hits <= (structure.hitsMax * 0.15))
+                        return (structure.hits <= (structure.hitsMax * 0.2))
                     }
 
                 });
-                creep.memory.curretTarget = target ? target : null;
+
+                creep.memory.currentTarget = target && target.length > 0 ? target[0].id : null;
             }
 
             if(creep.memory.currentTarget) {
+                var currentTarget = Game.getObjectById(creep.memory.currentTarget);
                 var result = creep.repair(currentTarget);
                 if(result == ERR_NOT_IN_RANGE) {
                     creep.moveTo(currentTarget);
                 }
                 else if(result !== OK){
-                    creep.memory.curretTarget = null;
+                    creep.memory.currentTarget = null;
                 }
             }
             else {
