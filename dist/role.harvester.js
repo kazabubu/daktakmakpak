@@ -109,6 +109,11 @@ var roleHarvester = {
                 creep.moveByPath(creep.memory.currentPath);
             }
 
+            if (creep.carry.energy == creep.carryCapacity)
+            {
+                creep.memory.currentState = STATE.TRANSFER;
+            }
+
         }
         else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.TRANSFER) {
             creep.memory.currentState = STATE.TRANSFER;
