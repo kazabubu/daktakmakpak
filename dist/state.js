@@ -3,9 +3,11 @@
  */
 const interruptingState = [StateDying.prototype];
 class State {
-    
 
-    
+    static isInterrupt(creep){
+        return false;
+    }
+
     initSwitch(creep){};
     doState(creep){
         var stateToPerform = this;

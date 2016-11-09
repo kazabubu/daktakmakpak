@@ -1,15 +1,15 @@
 /**
  * Created by gerson on 11/8/2016.
  */
+const name = 'HARVEST';
 class StateHarvest extends State {
-    const name = 'HARVEST';
 
     initSwitch(creep) {
 
     }
 
     doStateStrategy(creep){
-        if(creep.carry.energy < creep.carryCapacity)
+        if(creep.carry.energy <= (creep.carryCapacity * 0.7))
         {
             if (creep.memory.currentSource) {
                 var source = Game.getObjectById(creep.memory.currentSource);
@@ -43,8 +43,6 @@ class StateHarvest extends State {
             }
 
 
-
-
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 if (!creep.memory.currentPath){
                     source = Game.getObjectById(creep.memory.currentSource);
@@ -54,5 +52,10 @@ class StateHarvest extends State {
                 creep.moveByPath(creep.memory.currentPath);
             }
         }
+        else {
+            var statePrototype = StateSwitcher.getStateByName(TRANSFER);
+            StateSwitcher.switchState(creep, statePrototype);
+        }
+
     }
 }
