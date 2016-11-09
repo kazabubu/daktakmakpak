@@ -103,7 +103,7 @@ var roleBuilder = {
             if (!creep.memory.currentTarget){
                 var target = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.hits <= (structure.hitsMax * 0.2))
+                        return (structure.hits <= (structure.hitsMax * 0.3))
                     }
 
                 });
@@ -113,7 +113,7 @@ var roleBuilder = {
 
             if(creep.memory.currentTarget) {
                 var currentTarget = Game.getObjectById(creep.memory.currentTarget);
-                if (currentTarget.hits <= (currentTarget.hitsMax * 0.2))
+                if (currentTarget.hits <= (currentTarget.hitsMax * 0.3))
                 {
                     var result = creep.repair(currentTarget);
                     if(result == ERR_NOT_IN_RANGE) {

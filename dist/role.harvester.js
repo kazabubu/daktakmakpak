@@ -73,7 +73,7 @@ var roleHarvester = {
                 }
                 else {
                     var sources = creep.room.find(FIND_SOURCES);
-                    if (sources) {
+                    if (sources && sources.length > 0) {
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
                     //creep.memory.currentSource = getSourceToMine(creep);
