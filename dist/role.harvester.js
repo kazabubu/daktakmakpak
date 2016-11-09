@@ -25,6 +25,9 @@ var roleHarvester = {
             if (spawns[0].renewCreep(creep) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(spawns[0]);
             }
+            else if (creep.carry.energy > 0 ){
+                creep.transfer(spawns[0], RESOURCE_ENERGY);
+            }
 
             if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
             {
