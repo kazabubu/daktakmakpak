@@ -8,6 +8,7 @@ class StateHarvest extends State {
 
     }
 
+    /** @param {Creep} creep **/
     doStateStrategy(creep){
         if(creep.carry.energy < creep.carryCapacity)
         {
@@ -41,9 +42,6 @@ class StateHarvest extends State {
                     creep.memory.currentPath = null;
                 }
             }
-
-
-
 
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 if (!creep.memory.currentPath){
