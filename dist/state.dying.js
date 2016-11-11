@@ -1,9 +1,8 @@
 /**
  * Created by gerson on 11/8/2016.
  */
+const name = 'DYING';
 class StateDying extends State {
-
-    const name = 'DYING';
 
     static isInterrupt(creep){
         return creep.ticksToLive < 100;
