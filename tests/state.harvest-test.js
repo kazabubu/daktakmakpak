@@ -4,7 +4,7 @@
 var chai = require('chai');
 var expect = chai.expect; // we are using the "expect" style of Chai
 var sinon = require('sinon');
-var stateHarvest = require('./../dist/state.harvest.js');
+var StateHarvest = require('./../dist/state.harvest.js');
 
 describe('state.harvester', function (){
     it('if creep in range of source and has energy capacity it should call harvest', function(){

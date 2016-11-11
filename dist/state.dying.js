@@ -1,8 +1,12 @@
+var State = require('./state.js');
+var InterruptingStatesHolder = require('InterruptingStatesHolder');
 /**
  * Created by gerson on 11/8/2016.
  */
 const name = 'DYING';
 class StateDying extends State {
+
+
 
     static isInterrupt(creep){
         return creep.ticksToLive < 100;
@@ -27,4 +31,7 @@ class StateDying extends State {
             StateSwitcher.switchState(creep, statePrototype);
         }
     }
-}
+};
+InterruptingStatesHolder.registerInterruptingState(StateDying.prototype);
+
+module.exports = StateDying;

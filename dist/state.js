@@ -1,7 +1,10 @@
+
+//var StateDying = require('./state.dying.js');
+var InterruptingStatesHolder = require('./interruptingStates.js');
 /**
  * Created by gerson on 11/8/2016.
  */
-const interruptingState = [StateDying.prototype];
+
 class State {
 
     static isInterrupt(creep){
@@ -11,7 +14,7 @@ class State {
     initSwitch(creep){};
     doState(creep){
         var stateToPerform = this;
-        for (var interrupting in interruptingState)
+        for (var interrupting in InterruptingStatesHolder.getInterruptingStates())
         {
             if (interruptingState.isInterrupt(creep))
             {
@@ -25,3 +28,5 @@ class State {
     
     get stateName(){return name;};
 }
+
+module.exports = State;

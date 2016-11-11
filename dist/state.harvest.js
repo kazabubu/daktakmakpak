@@ -1,3 +1,5 @@
+
+var State = require('./state.js');
 /**
  * Created by gerson on 11/8/2016.
  */
@@ -61,4 +63,6 @@ class StateHarvest extends State {
         }
 
     }
-}
+};
+
+module.exports = StateHarvest;
