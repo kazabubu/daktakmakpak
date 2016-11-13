@@ -1,16 +1,22 @@
 /**
  * Created by or on 09/11/2016.
  */
-const name = 'TRANSFER';
+var State = require('./state.js');
+
 class StateTransfer extends State {
+
+
+    static getName() {
+        return 'TRANSFER';
+    };
 
     static isInterrupt(creep){
 
-    }
+    };
 
     initSwitch(creep) {
 
-    }
+    };
 
     doStateStrategy(creep){
         if (creep.energy > 0) {
@@ -53,4 +59,6 @@ class StateTransfer extends State {
 
     }
 }
+
+module.exports = StateTransfer;
 

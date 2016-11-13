@@ -1,5 +1,4 @@
 
-//var StateDying = require('./state.dying.js');
 var InterruptingStatesHolder = require('./interruptingStates.js');
 /**
  * Created by gerson on 11/8/2016.
@@ -7,9 +6,11 @@ var InterruptingStatesHolder = require('./interruptingStates.js');
 
 class State {
 
+    static getName(){};
+
     static isInterrupt(creep){
         return false;
-    }
+    };
 
     initSwitch(creep){};
     doState(creep){

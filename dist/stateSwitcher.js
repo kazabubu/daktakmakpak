@@ -1,10 +1,13 @@
 /**
  * Created by gerson on 11/8/2016.
  */
+var StateDying = require('StateDying');
+var StateHarvest = require('StateHarvest');
+var StateTransfer = require('StateTransfer');
 
-const DYING = 'DYING';
-const HARVEST = 'HARVEST';
-const TRANSFER = 'TRANSFER';
+const DYING = StateDying.getName();
+const HARVEST = StateHarvest.getName();
+const TRANSFER = StateTransfer.getName();
 const DEFAULT = 'DEFAULT';
 
 

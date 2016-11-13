@@ -1,12 +1,16 @@
 
 var State = require('./state.js');
+var StateTransfer = require('./state.transfer.js');
 /**
  * Created by gerson on 11/8/2016.
  */
-const name = 'HARVEST';
 class StateHarvest extends State {
 
-    initSwitch(creep) {
+    static getName() {
+        return 'HARVEST';
+    };
+
+    static initSwitch(creep) {
 
     }
 
@@ -45,12 +49,8 @@ class StateHarvest extends State {
                 }
             }
 
-
-
-
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 if (!creep.memory.currentPath){
-                    source = Game.getObjectById(creep.memory.currentSource);
                     creep.memory.currentPath = creep.room.findPath(creep.pos , source.pos);
                 }
 

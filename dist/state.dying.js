@@ -3,11 +3,12 @@ var InterruptingStatesHolder = require('InterruptingStatesHolder');
 /**
  * Created by gerson on 11/8/2016.
  */
-const name = 'DYING';
+
 class StateDying extends State {
 
-
-
+    getName() {
+        return 'DYING';
+    }
     static isInterrupt(creep){
         return creep.ticksToLive < 100;
     }
