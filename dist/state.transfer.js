@@ -2,6 +2,7 @@
  * Created by or on 09/11/2016.
  */
 var State = require('./state.js');
+var StateSwitcher = require('./stateSwitcher');
 
 class StateTransfer extends State {
 

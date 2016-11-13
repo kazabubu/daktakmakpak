@@ -18,6 +18,6 @@ class InterruptingStates {
 
 }
 
-var InterruptingStatesHolder = new InterruptingStates();
+InterruptingStatesHolder = new InterruptingStates();
 
 module.exports = InterruptingStatesHolder;

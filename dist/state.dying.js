@@ -1,5 +1,6 @@
 var State = require('./state.js');
-var InterruptingStatesHolder = require('InterruptingStatesHolder');
+var InterruptingStatesHolder = require('./interruptingStates.js');
+var StateSwitcher = require('./stateSwitcher');
 /**
  * Created by gerson on 11/8/2016.
  */

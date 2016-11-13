@@ -1,9 +1,9 @@
 /**
  * Created by gerson on 11/8/2016.
  */
-var StateDying = require('StateDying');
-var StateHarvest = require('StateHarvest');
-var StateTransfer = require('StateTransfer');
+var StateDying = require('./state.dying.js');
+var StateHarvest = require('./state.harvest.js');
+var StateTransfer = require('./state.transfer.js');
 
 const DYING = StateDying.getName();
 const HARVEST = StateHarvest.getName();
@@ -42,3 +42,5 @@ class StateSwitcher {
         return nameToState[name];
     }
 }
+
+module.exports = StateSwitcher;
