@@ -1,8 +1,8 @@
 /**
  * Created by gerson on 11/8/2016.
  */
-var StateDying = require('./state.dying.js');
 var StateHarvest = require('./state.harvest.js');
+var StateDying = require('./state.dying.js');
 var StateTransfer = require('./state.transfer.js');
 
 const DYING = StateDying.getName();

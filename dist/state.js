@@ -26,6 +26,8 @@ class State {
         stateToPerform.doStateStrategy(creep);
     };
     doStateStrategy(creep){throw new TypeError("abstract")};
+
+    shouldItSwitch(creep){throw new TypeError("abstract")};
     
     get stateName(){return name;};
 }

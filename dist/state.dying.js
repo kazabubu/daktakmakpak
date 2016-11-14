@@ -1,13 +1,12 @@
 var State = require('./state.js');
 var InterruptingStatesHolder = require('./interruptingStates.js');
-var StateSwitcher = require('./stateSwitcher');
 /**
  * Created by gerson on 11/8/2016.
  */
 
 class StateDying extends State {
 
-    getName() {
+    static getName() {
         return 'DYING';
     }
     static isInterrupt(creep){
@@ -26,12 +25,10 @@ class StateDying extends State {
         if (spawns[0].renewCreep(creep) == ERR_NOT_IN_RANGE) {
             creep.moveTo(spawns[0]);
         }
+    }
 
-        if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
-        {
-            var statePrototype = StateSwitcher.getDefaultStateForRole(creep.memory.role);
-            StateSwitcher.switchState(creep, statePrototype);
-        }
+    shouldItSwitch(creep){
+        return (creep.ticksToLive > 1300 || creep.memory.renewCount > 20);
     }
 };
 InterruptingStatesHolder.registerInterruptingState(StateDying.prototype);

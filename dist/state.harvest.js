@@ -1,7 +1,4 @@
-
 var State = require('./state.js');
-var StateTransfer = require('./state.transfer.js');
-var StateSwitcher = require('./stateSwitcher');
 /**
  * Created by gerson on 11/8/2016.
  */
@@ -9,7 +6,7 @@ class StateHarvest extends State {
 
     static getName() {
         return 'HARVEST';
-    };
+    }
 
     static initSwitch(creep) {
 
@@ -17,7 +14,7 @@ class StateHarvest extends State {
 
     /** @param {Creep} creep **/
     doStateStrategy(creep){
-        if(creep.carry.energy <= (creep.carryCapacity * 0.7))
+        if(creep.carry.energy < creep.carryCapacity )
         {
             if (creep.memory.currentSource) {
                 var source = Game.getObjectById(creep.memory.currentSource);
@@ -58,11 +55,10 @@ class StateHarvest extends State {
                 creep.moveByPath(creep.memory.currentPath);
             }
         }
-        else {
-            var statePrototype = StateSwitcher.getStateByName(TRANSFER);
-            StateSwitcher.switchState(creep, statePrototype);
-        }
+    }
 
+    shouldItSwitch(creep) {
+        return creep.carry.energy == (creep.carryCapacity);
     }
 };
 

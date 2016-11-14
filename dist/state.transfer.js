@@ -2,7 +2,6 @@
  * Created by or on 09/11/2016.
  */
 var State = require('./state.js');
-var StateSwitcher = require('./stateSwitcher');
 
 class StateTransfer extends State {
 
@@ -57,7 +56,10 @@ class StateTransfer extends State {
             var statePrototype = StateSwitcher.getDefaultStateForRole(creep.memory.role);
             StateSwitcher.switchState(creep, statePrototype);
         }
+    }
 
+    shouldItSwitch(creep) {
+        return creep.carry.energy == (creep.carryCapacity);
     }
 }
 
