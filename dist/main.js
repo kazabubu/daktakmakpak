@@ -5,7 +5,7 @@ var preLoopSetup = require('preLoopSetup');
 var tower = require('tower');
 
 module.exports.loop = function () {
-
+    preLoopSetup.setup();
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         if(creep.memory.role == 'harvester') {

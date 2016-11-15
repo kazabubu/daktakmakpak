@@ -11,10 +11,12 @@ var roleHarvester = {
 
         const DEFAULT_STATE = STATE.HARVEST;
 
-        if (creep.ticksToLive < 100)
+        if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentState = STATE.DIEING;
             creep.memory.renewCount = 0;
+            Memory.dyingCount[creep.room.name].count += 1;
+            Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
         }
 
         if (creep.memory.currentState == STATE.DIEING){
@@ -29,9 +31,14 @@ var roleHarvester = {
                 creep.transfer(spawns[0], RESOURCE_ENERGY);
             }
 
-            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
+            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 30)
             {
                 creep.memory.currentState = DEFAULT_STATE;
+                creep.memory.renewCount = 0;
+                if (Memory.dyingCount[creep.room.name].count > 0) {
+                    Memory.dyingCount[creep.room.name].count -= 1;
+                    Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
+                }
             }
         }
         if (typeof creep.memory.currentState == 'undefined')
@@ -76,7 +83,7 @@ var roleHarvester = {
                 }
                 else {
                     var sources = creep.room.find(FIND_SOURCES);
-                    if (sources && sources.length > 0) {
+                    if (sources && sources.length > 0 && typeof creep.ticksToLive != "undefined") {                        
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
                     //creep.memory.currentSource = getSourceToMine(creep);

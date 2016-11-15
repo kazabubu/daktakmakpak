@@ -15,10 +15,17 @@ var roleBuilder = {
 
         const DEFAULT_STATE = STATE.HARVEST;
 
-        if (creep.ticksToLive < 100)
+        var disable = false;
+        if (Memory.dyingCount[creep.room.name].count >= 3) {
+            disable = true
+        }
+
+        if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentState = STATE.DIEING;
             creep.memory.renewCount = 0;
+            Memory.dyingCount[creep.room.name].count += 1;
+            Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
         }
 
         if (creep.memory.currentState == STATE.DIEING){
@@ -33,9 +40,14 @@ var roleBuilder = {
                 creep.transfer(spawns[0], RESOURCE_ENERGY);
             }
 
-            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
+            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 30)
             {
                 creep.memory.currentState = DEFAULT_STATE;
+                creep.memory.renewCount = 0;
+                if (Memory.dyingCount[creep.room.name].count > 0) {
+                    Memory.dyingCount[creep.room.name].count -= 1;
+                    Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
+                }
             }
         }
 
@@ -65,7 +77,7 @@ var roleBuilder = {
             creep.memory.prevPos = null;
         }
 
-        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
+        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && !disable) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return ((structure.structureType == STRUCTURE_EXTENSION ||
@@ -116,7 +128,7 @@ var roleBuilder = {
 
             if(creep.memory.currentTarget) {
                 var currentTarget = Game.getObjectById(creep.memory.currentTarget);
-                if (currentTarget.hits <= (currentTarget.hitsMax * 0.3))
+                if (currentTarget != null && currentTarget.hits <= (currentTarget.hitsMax * 0.3))
                 {
                     var result = creep.repair(currentTarget);
                     if(result == ERR_NOT_IN_RANGE) {
