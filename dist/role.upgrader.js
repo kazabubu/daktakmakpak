@@ -10,10 +10,12 @@ var roleUpgrader = {
 
         const DEFAULT_STATE = STATE.TRANSFER;
 
-        if (creep.ticksToLive < 100)
+        if (creep.ticksToLive < 150)
         {
             creep.memory.currentState = STATE.DIEING;
             creep.memory.renewCount = 0;
+            Memory.dyingCount[creep.room.name].count += 1;
+            Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
         }
 
         if (creep.memory.currentState == STATE.DIEING){
@@ -28,9 +30,14 @@ var roleUpgrader = {
                 creep.transfer(spawns[0], RESOURCE_ENERGY);
             }
 
-            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
+            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 30)
             {
                 creep.memory.currentState = DEFAULT_STATE;
+                creep.memory.renewCount = 0;
+                if (Memory.dyingCount[creep.room.name] > 0) {
+                    Memory.dyingCount[creep.room.name] -= 1;
+                    Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
+                }
             }
         }
 
