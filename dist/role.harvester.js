@@ -35,8 +35,8 @@ var roleHarvester = {
             {
                 creep.memory.currentState = DEFAULT_STATE;
                 creep.memory.renewCount = 0;
-                if (Memory.dyingCount[creep.room.name] > 0) {
-                    Memory.dyingCount[creep.room.name] -= 1;
+                if (Memory.dyingCount[creep.room.name].count > 0) {
+                    Memory.dyingCount[creep.room.name].count -= 1;
                     Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
                 }
             }
