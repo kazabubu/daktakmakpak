@@ -15,7 +15,7 @@ var roleUpgrader = {
             disable = true
         }
 
-        if (creep.ticksToLive < 150)
+        if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentState = STATE.DIEING;
             creep.memory.renewCount = 0;
