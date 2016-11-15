@@ -116,7 +116,7 @@ var roleBuilder = {
 
             if(creep.memory.currentTarget) {
                 var currentTarget = Game.getObjectById(creep.memory.currentTarget);
-                if (currentTarget.hits <= (currentTarget.hitsMax * 0.3))
+                if (currentTarget != null && currentTarget.hits <= (currentTarget.hitsMax * 0.3))
                 {
                     var result = creep.repair(currentTarget);
                     if(result == ERR_NOT_IN_RANGE) {
