@@ -25,6 +25,9 @@ var roleHarvester = {
             if (spawns[0].renewCreep(creep) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(spawns[0]);
             }
+            else if (creep.carry.energy > 0 ){
+                creep.transfer(spawns[0], RESOURCE_ENERGY);
+            }
 
             if (creep.ticksToLive > 1300 || creep.memory.renewCount > 20)
             {
@@ -73,7 +76,7 @@ var roleHarvester = {
                 }
                 else {
                     var sources = creep.room.find(FIND_SOURCES);
-                    if (sources) {
+                    if (sources && sources.length > 0) {
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
                     //creep.memory.currentSource = getSourceToMine(creep);
@@ -104,6 +107,11 @@ var roleHarvester = {
                 }
 
                 creep.moveByPath(creep.memory.currentPath);
+            }
+
+            if (creep.carry.energy == creep.carryCapacity)
+            {
+                creep.memory.currentState = STATE.TRANSFER;
             }
 
         }
