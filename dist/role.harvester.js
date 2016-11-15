@@ -50,11 +50,11 @@ var roleHarvester = {
         {
             creep.memory.prevPos.count = 1;
         }
-        else {
+        else if(prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y)){
             creep.memory.prevPos.count += 1;
         }
 
-        if (prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 1)
+        if (prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 3 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentPath = null;
             creep.memory.currentSource = null;
