@@ -15,6 +15,11 @@ var roleBuilder = {
 
         const DEFAULT_STATE = STATE.HARVEST;
 
+        var disable = false;
+        if (Memory.dyingCount[creep.room.name].count >= 3) {
+            disable = true
+        }
+
         if (creep.ticksToLive < 150)
         {
             creep.memory.currentState = STATE.DIEING;
@@ -72,7 +77,7 @@ var roleBuilder = {
             creep.memory.prevPos = null;
         }
 
-        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
+        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && !disable) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return ((structure.structureType == STRUCTURE_EXTENSION ||

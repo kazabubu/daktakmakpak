@@ -10,6 +10,11 @@ var roleUpgrader = {
 
         const DEFAULT_STATE = STATE.TRANSFER;
 
+        var disable = false;
+        if (Memory.dyingCount[creep.room.name].count >= 3) {
+            disable = true
+        }
+
         if (creep.ticksToLive < 150)
         {
             creep.memory.currentState = STATE.DIEING;
@@ -67,7 +72,7 @@ var roleUpgrader = {
             creep.memory.prevPos = null;            
         }
 
-        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER) {
+        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER && !disable) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return ((structure.structureType == STRUCTURE_EXTENSION ||
