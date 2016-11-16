@@ -57,17 +57,16 @@ var roleHarvester = {
         {
             creep.memory.prevPos.count = 1;
         }
-        else {
+        else if(prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y)){
             creep.memory.prevPos.count += 1;
         }
 
-        if (prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 1)
+        if (prevPos && creep.pos.isEqualTo(prevPos.x, prevPos.y) && creep.memory.prevPos.count > 3 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentPath = null;
             creep.memory.currentSource = null;
             creep.memory.prevPos = null;
             creep.memory.currentResource = null;
-            creep.memory.currentState = DEFAULT_STATE;
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
@@ -148,7 +147,8 @@ var roleHarvester = {
                 }
             }
 
-            if (creep.carry.energy < (creep.carry.energyCapacity * 0.2 ))
+            console
+            if (creep.carry.energy < (creep.carryCapacity * 0.2 ))
             {
                 creep.memory.currentState = STATE.HARVEST;
                 creep.memory.currentPath = null;
