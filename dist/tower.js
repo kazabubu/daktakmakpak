@@ -12,6 +12,9 @@ var tower = {
 
             var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             if(closestHostile) {
+                var roomName = 'E38N43';
+                var username = closestHostile.owner.username;
+                Game.notify(`User ${username} spotted in room ${roomName}`);
                 tower.attack(closestHostile);
             }
         }
