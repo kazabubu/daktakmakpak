@@ -52,14 +52,10 @@ class StateTransfer extends State {
                 creep.memory.currentResource = null;
             }
         }
-        else {
-            var statePrototype = StateSwitcher.getDefaultStateForRole(creep.memory.role);
-            StateSwitcher.switchState(creep, statePrototype);
-        }
     }
 
     shouldItSwitch(creep) {
-        return creep.carry.energy == (creep.carryCapacity);
+        return creep.carry.energy == 0;
     }
 }
 

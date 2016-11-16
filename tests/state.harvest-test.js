@@ -39,11 +39,11 @@ describe('state.harvester', function (){
         stateHarvest.doStateStrategy(creep);
 
         creep.restore();
-        Game.restore();
+        GameMock.restore();
         source.restore();
         room.restore();
         creep.verify();
-        Game.verify();
+        GameMock.verify();
         source.verify();
         room.restore();
     })

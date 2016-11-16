@@ -1,3 +1,4 @@
+"use strict";
 var State = require('./state.js');
 /**
  * Created by gerson on 11/8/2016.
