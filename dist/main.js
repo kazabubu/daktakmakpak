@@ -19,7 +19,7 @@ module.exports.loop = function () {
         }
     }
 
-    var currTower = Game.getObjectById('655c47591e87869f652f7c04');
+    var currTower = Game.getObjectById('5822683165594bbb2c7a942a');
     tower.searchAndAttack(currTower);
 
 }
