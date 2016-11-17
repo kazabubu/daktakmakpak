@@ -77,6 +77,7 @@ var roleBuilder = {
             creep.memory.currentSource = null;
             creep.memory.prevPos = null;
             creep.memory.currentResource = null;
+            creep.memory.currentTarget = null;
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && !disable) {
