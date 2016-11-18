@@ -1,4 +1,11 @@
 "use strict";
+
+const STATE = {
+    HARVEST: 'Harvest',
+    DIEING: 'Dieing',
+    TRANSFER: 'TRANSFER'
+};
+
 class preLoopSetup {
     static setup() {
         preLoopSetup.dyingCount();
