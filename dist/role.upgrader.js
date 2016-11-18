@@ -72,6 +72,7 @@ var roleUpgrader = {
             creep.memory.currentSource = null;
             creep.memory.prevPos = null;
             creep.memory.currentResource = null;
+            creep.memory.currentTarget = null;
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER && !disable) {
