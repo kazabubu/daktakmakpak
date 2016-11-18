@@ -11,7 +11,7 @@ var roleUpgrader = {
         const DEFAULT_STATE = STATE.TRANSFER;
 
         var disable = false;
-        if (Memory.dyingCount[creep.room.name].count >= 3) {
+        if (!_.isUndefined(Memory.dyingCount[creep.room.name]) && Memory.dyingCount[creep.room.name].count >= 3) {
             disable = true
         }
 
