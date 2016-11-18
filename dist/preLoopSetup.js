@@ -1,10 +1,18 @@
+"use strict";
 class preLoopSetup {
     static setup() {
-        if(typeof Memory.dyingCount == 'undefined' || (Game.time - Memory.dyingCount['E38N43'].lastUpdate > 30)){
-            Memory.dyingCount = {"E38N43" : {"count" : 0, "lastUpdate" : 0}};
-        }
+        preLoopSetup.dyingCount();
     }
 
+    static dyingCount() {
+        var dyingCount = 0;
+        for(var name in Game.creeps) {
+            if (Game.creeps[name].memory.currentState == STATE.DIEING) {
+                dyingCount += 1;
+            }
+        }
+        Memory.dyingCount = dyingCount;
+    }
 }
 
 module.exports = preLoopSetup;
