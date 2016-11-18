@@ -18,7 +18,12 @@ class preLoopSetup {
                 dyingCount += 1;
             }
         }
+        if (_.isUndefined(Memory.dyingCount)) {
+            Memory.dyingCount = {};
+        }
+
         if (_.isUndefined(Memory.dyingCount['E38N43'])) {
+
             Memory.dyingCount['E38N43'] = {};
         }
         Memory.dyingCount['E38N43'].count = dyingCount;
