@@ -106,7 +106,7 @@ var roleBuilder = {
                 }
             }
             else {
-                creep.memory.currentState == STATE.FIX;
+                creep.memory.currentState = STATE.FIX;
                 creep.memory.currentTarget = null;
             }
 
