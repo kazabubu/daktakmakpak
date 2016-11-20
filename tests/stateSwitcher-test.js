@@ -5,17 +5,19 @@ var chai = require('chai');
 var expect = chai.expect; // we are using the "expect" style of Chai
 var sinon = require('sinon');
 var StateHarvest = require('./../dist/state.harvest.js');
+var StateSwitcher = require('./../dist/stateSwitcher');
 require('D:\\Devl\\Workspace\\screeps-sim\\ScreepsAutocomplete-master\\Creep.js');
 require('D:\\Devl\\Workspace\\screeps-sim\\ScreepsAutocomplete-master\\Game.js');
 require('D:\\Devl\\Workspace\\screeps-sim\\ScreepsAutocomplete-master\\Source.js');
 require('D:\\Devl\\Workspace\\screeps-sim\\ScreepsAutocomplete-master\\Room.js');
 
+
 const ERR_NOT_IN_RANGE = -9;
 
 
 
-describe('state.harvester', function (){
-    it('if creep has source and has energy lower than 70% energy capacity it should call harvest, if not in range should call move', function(){
+describe('stateSwitcher', function (){
+    it('if a creep is harvest state and full it should switch state to transfer', function(){
         var stateHarvest = new StateHarvest();
         var creep = new Creep();
         var GameMock = sinon.mock(Game);
@@ -24,6 +26,7 @@ describe('state.harvester', function (){
         var roomMock = sinon.mock(room);
         var creepMock = sinon.mock(creep);
 
+        creep.memory.currentState = StateHarvest.getName();
         creep.carry = {};
         creep.carry.energy = 50;
         creep.carryCapacity = 100;
@@ -38,7 +41,7 @@ describe('state.harvester', function (){
         creepMock.expects('moveByPath').withArgs({}).returns(true);
         GameMock.expects('getObjectById').withArgs(creep.memory.currentSource).returns(source);
 
-        stateHarvest.doStateStrategy(creep);
+        StateSwitcher.executeState(creep);
 
         creepMock.restore();
         GameMock.restore();

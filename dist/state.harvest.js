@@ -1,5 +1,6 @@
 "use strict";
 var State = require('./state.js');
+const ERR_NOT_IN_RANGE = -9;
 /**
  * Created by gerson on 11/8/2016.
  */
