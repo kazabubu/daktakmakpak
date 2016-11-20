@@ -15,8 +15,6 @@ var roleHarvester = {
         {
             creep.memory.currentState = STATE.DIEING;
             creep.memory.renewCount = 0;
-            Memory.dyingCount[creep.room.name].count += 1;
-            Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
         }
 
         if (creep.memory.currentState == STATE.DIEING){
@@ -35,10 +33,6 @@ var roleHarvester = {
             {
                 creep.memory.currentState = DEFAULT_STATE;
                 creep.memory.renewCount = 0;
-                if (Memory.dyingCount[creep.room.name].count > 0) {
-                    Memory.dyingCount[creep.room.name].count -= 1;
-                    Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
-                }
             }
         }
         if (typeof creep.memory.currentState == 'undefined')
@@ -129,7 +123,8 @@ var roleHarvester = {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_EXTENSION ||
                             structure.structureType == STRUCTURE_SPAWN ||
-                           // structure.structureType == STRUCTURE_CONTAINER ||
+                            structure.structureType == STRUCTURE_CONTAINER ||
+                            structure.structureType == STRUCTURE_STORAGE ||
                             structure.structureType == STRUCTURE_TOWER) && ((typeof structure.energy !== 'undefined' && structure.energy < structure.energyCapacity) ||
                             (typeof structure.store !== 'undefined' && structure.store.energy < structure.storeCapacity));
                     }

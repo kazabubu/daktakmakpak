@@ -11,7 +11,7 @@ var roleUpgrader = {
         const DEFAULT_STATE = STATE.TRANSFER;
 
         var disable = false;
-        if (Memory.dyingCount[creep.room.name].count >= 3) {
+        if (!_.isUndefined(Memory.dyingCount[creep.room.name]) && Memory.dyingCount[creep.room.name].count >= 3) {
             disable = true
         }
 
@@ -19,8 +19,6 @@ var roleUpgrader = {
         {
             creep.memory.currentState = STATE.DIEING;
             creep.memory.renewCount = 0;
-            Memory.dyingCount[creep.room.name].count += 1;
-            Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
         }
 
         if (creep.memory.currentState == STATE.DIEING){
@@ -39,10 +37,6 @@ var roleUpgrader = {
             {
                 creep.memory.currentState = DEFAULT_STATE;
                 creep.memory.renewCount = 0;
-                if (Memory.dyingCount[creep.room.name].count > 0) {
-                    Memory.dyingCount[creep.room.name].count -= 1;
-                    Memory.dyingCount[creep.room.name].lastUpdate = Game.time;
-                }
             }
         }
 
@@ -76,16 +70,27 @@ var roleUpgrader = {
         }
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER && !disable) {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return ((structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_CONTAINER)
-                        && (!!structure.energy && structure.energy > (structure.energyCapacity * 0.3)) ||
-                        (!!structure.store && structure.store.energy > (structure.storeCapacity * 0.3))
-                    );
+            var targets;
+            if (creep.room.name == 'E38N43'){
+                var storage = Game.getObjectById('582dbc756fba2bb555a17156');
+                if (!_.isUndefined(storage) && storage.store.energy > 1000){
+                    targets = [storage];
                 }
-            });
+            }
+
+            if (_.isUndefined(targets)) {
+                targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return ((structure.structureType == STRUCTURE_EXTENSION ||
+                            structure.structureType == STRUCTURE_SPAWN ||
+                            structure.structureType == STRUCTURE_CONTAINER)
+                            && (!!structure.energy && structure.energy > (structure.energyCapacity * 0.3)) ||
+                            (!!structure.store && structure.store.energy > (structure.storeCapacity * 0.3))
+                        );
+                    }
+                });
+            }
+
             if (targets && targets.length > 0)
                 if(creep.withdraw(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);

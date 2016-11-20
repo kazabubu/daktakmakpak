@@ -1,10 +1,33 @@
+"use strict";
+
+const STATE = {
+    HARVEST: 'Harvest',
+    DIEING: 'Dieing',
+    TRANSFER: 'TRANSFER'
+};
+
 class preLoopSetup {
     static setup() {
-        if(typeof Memory.dyingCount == 'undefined' || (Game.time - Memory.dyingCount['E38N43'].lastUpdate > 100)){
-            Memory.dyingCount = {"E38N43" : {"count" : 0, "lastUpdate" : 0}};
-        }
+        preLoopSetup.dyingCount();
     }
 
+    static dyingCount() {
+        var dyingCount = 0;
+        for(var name in Game.creeps) {
+            if (Game.creeps[name].memory.currentState == STATE.DIEING) {
+                dyingCount += 1;
+            }
+        }
+        if (_.isUndefined(Memory.dyingCount)) {
+            Memory.dyingCount = {};
+        }
+
+        if (_.isUndefined(Memory.dyingCount['E38N43'])) {
+
+            Memory.dyingCount['E38N43'] = {};
+        }
+        Memory.dyingCount['E38N43'].count = dyingCount;
+    }
 }
 
 module.exports = preLoopSetup;
