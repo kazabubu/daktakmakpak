@@ -5,6 +5,7 @@
 var StateHarvest = require('./state.harvest.js');
 var StateDying = require('./state.dying.js');
 var StateTransfer = require('./state.transfer.js');
+var InterruptingStatesHolder = require('./interruptingStates.js');
 
 const DYING = StateDying.getName();
 const HARVEST = StateHarvest.getName();
@@ -23,7 +24,7 @@ const nameToState = {
 }
 
 
-class StateSwitcher {
+class StateController {
     
     static getDefaultStateForRole(role) {
         return roleDefaultState[role];
@@ -33,7 +34,22 @@ class StateSwitcher {
         if(!_.isString(creep.memory.currentState)) {
             creep.memory.currentState = this.prototype.getDefaultStateNameForRole(creep);
         }
-        this.prototype.getStateByName(creep.memory.currentState).doStateStrategy(creep);
+
+        var stateToPerform = this.prototype.getStateByName(creep.memory.currentState);
+
+        for (var interruptingState in InterruptingStatesHolder.getInterruptingStates())
+        {
+            if (interruptingState.isInterrupt(creep))
+            {
+                stateToPerform = this.switchState(creep, interruptingState);
+            }
+        }
+
+        stateToPerform.doStateStrategy(creep);
+
+        if (stateToPerform.shouldItSwitch(creep)) {
+            this.switchState(creep, )
+        }
     }
 
     static getDefaultStateNameForRole(creep)
@@ -57,4 +73,4 @@ class StateSwitcher {
     }
 }
 
-module.exports = StateSwitcher;
+module.exports = StateController;

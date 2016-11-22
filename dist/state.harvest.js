@@ -15,7 +15,7 @@ class StateHarvest extends State {
     }
 
     /** @param {Creep} creep **/
-    doStateStrategy(creep){
+    static doStateStrategy(creep){
         if(creep.carry.energy < creep.carryCapacity )
         {
             if (creep.memory.currentSource) {
@@ -59,7 +59,7 @@ class StateHarvest extends State {
         }
     }
 
-    shouldItSwitch(creep) {
+    static shouldItSwitch(creep) {
         return creep.carry.energy == (creep.carryCapacity);
     }
 };

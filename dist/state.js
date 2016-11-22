@@ -1,5 +1,5 @@
 
-var InterruptingStatesHolder = require('./interruptingStates.js');
+
 /**
  * Created by gerson on 11/8/2016.
  */
@@ -12,24 +12,11 @@ class State {
         return false;
     };
 
-    initSwitch(creep){};
-    doState(creep){
-        var stateToPerform = this;
-        for (var interrupting in InterruptingStatesHolder.getInterruptingStates())
-        {
-            if (interruptingState.isInterrupt(creep))
-            {
-               stateToPerform = StateSwitcher.switchState(creep, interrupting);
-            }
-        }
+    static initSwitch(creep){};
 
-        stateToPerform.doStateStrategy(creep);
-    };
-    doStateStrategy(creep){throw new TypeError("abstract")};
+    static doStateStrategy(creep){throw new TypeError("abstract")};
 
-    shouldItSwitch(creep){throw new TypeError("abstract")};
-    
-    get stateName(){return name;};
+    static shouldItSwitch(creep){throw new TypeError("abstract")};
 }
 
 module.exports = State;
