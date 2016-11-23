@@ -12,12 +12,12 @@ var roleHarvester = {
         const DEFAULT_STATE = STATE.HARVEST;
 
         if (creep.pos.y == 1){
-            console.log(JSON.stringify(creep));
-            console.log("leaving:  " + JSON.stringify(creep.memory.currentState));
-            console.log("path: " + JSON.stringify(creep.memory.currentPath));
-            console.log("source: " + JSON.stringify(creep.memory.currentSource));
-            console.log("resource:" + JSON.stringify(creep.memory.currentResource));
-            console.log("target:" + JSON.stringify(creep.memory.currentTarget));
+            Game.notify(JSON.stringify(creep));
+            Game.notify("leaving:  " + JSON.stringify(creep.memory.currentState));
+            Game.notify("path: " + JSON.stringify(creep.memory.currentPath));
+            Game.notify("source: " + JSON.stringify(creep.memory.currentSource));
+            Game.notify("resource:" + JSON.stringify(creep.memory.currentResource));
+            Game.notify("target:" + JSON.stringify(creep.memory.currentTarget));
 
         }
 
@@ -87,6 +87,9 @@ var roleHarvester = {
                 }
                 else {
                     var sources = creep.room.find(FIND_SOURCES);
+                    if (sources && sources.length > 2){
+                        Game.notify("got more than a single resource:" + JSON.stringify(sources));
+                    }
                     if (sources && sources.length > 0 && typeof creep.ticksToLive != "undefined") {                        
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
