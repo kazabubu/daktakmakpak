@@ -125,8 +125,9 @@ var roleBuilder = {
             if (!creep.memory.currentTarget){
                 var target = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return ((structure.hits <= (structure.hitsMax * 0.3) && structure.structureType !== STRUCTURE_WALL) ||
-                        (structure.structureType == STRUCTURE_WALL && structure.hits <= 2000000))
+                        return ((structure.hits <= (structure.hitsMax * 0.3) && structure.structureType !== STRUCTURE_WALL
+                        && structure.structureType !== STRUCTURE_RAMPART) ||
+                        ((structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) && structure.hits <= 2000000))
 
 
                     }
@@ -139,8 +140,9 @@ var roleBuilder = {
             if(creep.memory.currentTarget) {
                 var currentTarget = Game.getObjectById(creep.memory.currentTarget);
 
-                if (currentTarget != null && (currentTarget.hits <= (currentTarget.hitsMax * 0.3) && currentTarget.structureType !== STRUCTURE_WALL )
-                    || (currentTarget.structureType == STRUCTURE_WALL && currentTarget.hits <= 2000000))
+                if (currentTarget != null && (currentTarget.hits <= (currentTarget.hitsMax * 0.3) &&
+                    currentTarget.structureType !== STRUCTURE_WALL && currentTarget !== STRUCTURE_RAMPART )
+                    || ((currentTarget.structureType == STRUCTURE_WALL || currentTarget.structureType == STRUCTURE_RAMPART )&& currentTarget.hits <= 2000000))
                 {
 
                     var result = creep.repair(currentTarget);

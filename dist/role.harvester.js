@@ -11,6 +11,16 @@ var roleHarvester = {
 
         const DEFAULT_STATE = STATE.HARVEST;
 
+        if (creep.pos.y == 1){
+            console.log(JSON.stringify(creep));
+            console.log("leaving:  " + JSON.stringify(creep.memory.currentState));
+            console.log("path: " + JSON.stringify(creep.memory.currentPath));
+            console.log("source: " + JSON.stringify(creep.memory.currentSource));
+            console.log("resource:" + JSON.stringify(creep.memory.currentResource));
+            console.log("target:" + JSON.stringify(creep.memory.currentTarget));
+
+        }
+
         if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentState = STATE.DIEING;
