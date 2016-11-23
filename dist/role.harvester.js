@@ -93,7 +93,7 @@ var roleHarvester = {
                     if (sources && sources.length > 0 && typeof creep.ticksToLive != "undefined") {                        
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
-                    //creep.memory.currentSource = getSourceToMine(creep);
+
                 }
             }
 
