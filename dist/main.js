@@ -22,4 +22,7 @@ module.exports.loop = function () {
     var currTower = Game.getObjectById('5822683165594bbb2c7a942a');
     tower.searchAndAttack(currTower);
 
+    currTower = Game.getObjectById('58377293465957f661f1188a');
+    tower.searchAndAttack(currTower);
+
 }
