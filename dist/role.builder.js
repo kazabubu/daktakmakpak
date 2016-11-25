@@ -16,7 +16,7 @@ var roleBuilder = {
         const DEFAULT_STATE = STATE.HARVEST;
 
         var disable = false;
-        if (Memory.dyingCount[creep.room.name].count >= 3) {
+        if (!_.isUndefined(Memory.dyingCount) && Memory.dyingCount[creep.room.name].count >= 3) {
             disable = true
         }
 

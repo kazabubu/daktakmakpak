@@ -87,9 +87,6 @@ var roleHarvester = {
                 }
                 else {
                     var sources = creep.room.find(FIND_SOURCES);
-                    if (sources && sources.length > 2){
-                        Game.notify("got more than a single resource:" + JSON.stringify(sources));
-                    }
                     if (sources && sources.length > 0 && typeof creep.ticksToLive != "undefined") {                        
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
@@ -117,7 +114,7 @@ var roleHarvester = {
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 if (!creep.memory.currentPath){
                     source = Game.getObjectById(creep.memory.currentSource);
-                    creep.memory.currentPath = creep.room.findPath(creep.pos , source.pos);
+                    creep.memory.currentPath = creep.room.findPath(creep.pos , source.pos, {"maxRooms" : 1});
                 }
 
                 creep.moveByPath(creep.memory.currentPath);
@@ -142,6 +139,9 @@ var roleHarvester = {
                             (typeof structure.store !== 'undefined' && structure.store.energy < structure.storeCapacity));
                     }
                 });
+
+
+
                 creep.memory.currentTarget = targets.length > 0 ? targets[0].id : null;
             }
 
