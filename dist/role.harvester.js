@@ -1,4 +1,27 @@
+"use strict";
 var roleHarvester = {
+
+    structurePrioratyCompare: function (a, b) {
+        const STRUCT_PRIORITY = {
+            STRUCTURE_TOWER: 100,
+            STRUCTURE_SPAWN: 99,
+            STRUCTURE_EXTENSION: 98,
+            STRUCTURE_STORAGE: 97,
+            STRUCTURE_CONTAINER: 96
+        }
+        console.log(a);
+        console.log(b);
+        var aPriority = _.isUndefined(STRUCT_PRIORITY[a.structureType]) ? 0 : STRUCT_PRIORITY[a.structureType];
+        var bPriority = _.isUndefined(STRUCT_PRIORITY[b.structureType]) ? 0 : STRUCT_PRIORITY[b.structureType];
+
+        if (aPriority < bPriority) {
+            return -1;
+        }
+        if (aPriority > bPriority) {
+            return 1;
+        }
+        return 0;
+    },
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -141,6 +164,27 @@ var roleHarvester = {
                 });
 
 
+                 targets.sort(function (a, b) {
+                    var STRUCT_PRIORITY = {
+                        [STRUCTURE_SPAWN]: 100,
+                        [STRUCTURE_TOWER]: 99,
+                        [STRUCTURE_EXTENSION]: 98,
+                        [STRUCTURE_STORAGE]: 97,
+                        [STRUCTURE_CONTAINER]: 96
+                    }
+
+
+                    var aPriority = _.isUndefined(STRUCT_PRIORITY[a.structureType]) ? 0 : STRUCT_PRIORITY[a.structureType];
+                    var bPriority = _.isUndefined(STRUCT_PRIORITY[b.structureType]) ? 0 : STRUCT_PRIORITY[b.structureType];
+
+                    if (aPriority > bPriority) {
+                        return -1;
+                    }
+                    if (aPriority < bPriority) {
+                        return 1;
+                    }
+                    return 0;
+                });
 
                 creep.memory.currentTarget = targets.length > 0 ? targets[0].id : null;
             }
