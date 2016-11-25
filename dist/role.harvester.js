@@ -163,7 +163,7 @@ var roleHarvester = {
                     }
                 });
 
-
+                // sorting descending order by priority
                  targets.sort(function (a, b) {
                     var STRUCT_PRIORITY = {
                         [STRUCTURE_SPAWN]: 100,
