@@ -9,6 +9,7 @@ const STATE = {
 class preLoopSetup {
     static setup() {
         preLoopSetup.dyingCount();
+        preLoopSetup.attackSetup();
     }
 
     static dyingCount() {
@@ -28,6 +29,11 @@ class preLoopSetup {
         }
         Memory.dyingCount['E38N43'].count = dyingCount;
     }
+
+    static attackSetup() {
+        Memory.roomToAttack = 'E38N44';
+    }
+
 }
 
 module.exports = preLoopSetup;
