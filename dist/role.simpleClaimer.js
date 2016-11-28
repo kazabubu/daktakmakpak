@@ -3,7 +3,7 @@
  * Created by or on 28/11/2016.
  */
 
-var roleSimpleAttacker = {
+var roleSimpleClaimer = {
     run: function(creep) {
 
         const STATE = {
@@ -20,30 +20,34 @@ var roleSimpleAttacker = {
         }
 
 
-       /* if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
+        /* if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
+         {
+         creep.memory.currentState = STATE.DIEING;
+         creep.memory.renewCount = 0;
+         }
+
+         if (creep.memory.currentState == STATE.DIEING){
+         creep.memory.renewCount += 1;
+         var spawns = creep.room.find(FIND_STRUCTURES, {
+         filter: (structure) => {
+         return (structure.structureType == STRUCTURE_SPAWN)}});
+         if (spawns[0].renewCreep(creep) == ERR_NOT_IN_RANGE) {
+         creep.moveTo(spawns[0]);
+         }
+         else if (creep.carry.energy > 0 ){
+         creep.transfer(spawns[0], RESOURCE_ENERGY);
+         }
+
+         if (creep.ticksToLive > 1300 || creep.memory.renewCount > 30)
+         {
+         creep.memory.currentState = DEFAULT_STATE;
+         creep.memory.renewCount = 0;
+         }
+         }*/
+        if (typeof creep.memory.currentState == 'undefined')
         {
-            creep.memory.currentState = STATE.DIEING;
-            creep.memory.renewCount = 0;
+            creep.memory.currentState = DEFAULT_STATE;
         }
-
-        if (creep.memory.currentState == STATE.DIEING){
-            creep.memory.renewCount += 1;
-            var spawns = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_SPAWN)}});
-            if (spawns[0].renewCreep(creep) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(spawns[0]);
-            }
-            else if (creep.carry.energy > 0 ){
-                creep.transfer(spawns[0], RESOURCE_ENERGY);
-            }
-
-            if (creep.ticksToLive > 1300 || creep.memory.renewCount > 30)
-            {
-                creep.memory.currentState = DEFAULT_STATE;
-                creep.memory.renewCount = 0;
-            }
-        }*/
 
         var prevPos = creep.memory.prevPos;
         if (!creep.memory.prevPos){
@@ -92,7 +96,7 @@ var roleSimpleAttacker = {
                     targets = creep.room.find(FIND_HOSTILE_STRUCTURES,{
                         filter: (structure) => {
                             return (structure.structureType != STRUCTURE_CONTROLLER);
-                    }});
+                        }});
                 }
 
                 if (targets && targets.length > 0) {
@@ -109,4 +113,4 @@ var roleSimpleAttacker = {
     }
 };
 
-module.exports = roleSimpleAttacker;
+module.exports = roleSimpleClaimer;
