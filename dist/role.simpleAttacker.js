@@ -100,7 +100,6 @@ var roleSimpleAttacker = {
                 }
 
                 if (targets && targets.length > 0) {
-                    console.log(JSON.stringify(targets[0]));
                     creep.memory.currentTarget = targets[0].id;
                     creep.memory.currentPath = creep.room.findPath(creep.pos, targets[0].pos);
                 }
