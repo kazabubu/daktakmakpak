@@ -90,12 +90,12 @@ var roleSimpleAttacker = {
             }
         }
         else if (creep.memory.currentState == STATE.ATTACKING) {
-            if (!creep.memory.currentTarget && !creep.memory.currentPath) {
+            if (!creep.memory.currentTarget || !creep.memory.currentPath) {
                 var targets = creep.room.find(FIND_HOSTILE_SPAWNS)
                 if (!targets || targets.length < 1){
                     targets = creep.room.find(FIND_HOSTILE_STRUCTURES,{
                         filter: (structure) => {
-                            return (structure.structureType == STRUCTURE_CONTROLLER);
+                            return (structure.structureType != STRUCTURE_CONTROLLER);
                     }});
                 }
 
