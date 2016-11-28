@@ -76,8 +76,8 @@ var roleSimpleClaimer = {
 
         if (creep.memory.currentState == STATE.MOVING){
             var hasRachedFlag = false;
-            if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 3)) {
-                if (_.isUndefined(creep.memory.currentPath) || !creep.memory.currentPath) {
+            if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 1)) {
+                if (_.isUndefined(creep.memory.currentPath) || !creep.memory.currentPath || creep.memory.currentPath.length == 0) {
                     creep.memory.currentPath = creep.room.findPath(creep.pos, Game.flags['Flag1'].pos);
                 }
                 creep.moveByPath(creep.memory.currentPath);
@@ -102,6 +102,7 @@ var roleSimpleClaimer = {
                 }
             }
             var target = Game.getObjectById(creep.memory.currentTarget);
+
 
             if(creep.attackController(target) == ERR_NOT_IN_RANGE){
                 creep.moveByPath(creep.memory.currentPath);
