@@ -5,6 +5,7 @@ var preLoopSetup = require('preLoopSetup');
 var tower = require('tower');
 var autoSpawn = require('autoSpawn');
 var roleSimpleAttacker = require('role.simpleAttacker');
+var roleSimpleClaimer = require('role.simpleClaimer');
 
 module.exports.loop = function () {
     preLoopSetup.setup();
@@ -21,6 +22,9 @@ module.exports.loop = function () {
         }
         if(creep.memory.role == 'simpleAttacker'){
             roleSimpleAttacker.run(creep);
+        }
+        if(creep.memory.role == 'simpleClaimer') {
+            roleSimpleClaimer.run(creep);
         }
     }
 

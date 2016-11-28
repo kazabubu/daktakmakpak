@@ -91,13 +91,10 @@ var roleSimpleClaimer = {
         }
         else if (creep.memory.currentState == STATE.ATTACKING) {
             if (!creep.memory.currentTarget || !creep.memory.currentPath) {
-                var targets = creep.room.find(FIND_HOSTILE_SPAWNS)
-                if (!targets || targets.length < 1){
-                    targets = creep.room.find(FIND_HOSTILE_STRUCTURES,{
-                        filter: (structure) => {
-                            return (structure.structureType != STRUCTURE_CONTROLLER);
-                        }});
-                }
+                var targets = creep.room.find(FIND_HOSTILE_STRUCTURES,{
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_CONTROLLER);
+                    }});
 
                 if (targets && targets.length > 0) {
                     creep.memory.currentTarget = targets[0].id;
@@ -106,7 +103,7 @@ var roleSimpleClaimer = {
             }
             var target = Game.getObjectById(creep.memory.currentTarget);
 
-            if(creep.attack(target) == ERR_NOT_IN_RANGE){
+            if(creep.attackController(target) == ERR_NOT_IN_RANGE){
                 creep.moveByPath(creep.memory.currentPath);
             }
         }
