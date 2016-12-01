@@ -191,7 +191,12 @@ var roleHarvester = {
 
             if(!!creep.memory.currentTarget) {
                 var currTarget = Game.getObjectById(creep.memory.currentTarget);
-                if(creep.transfer(currTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if (currTarget.structureType == STRUCTURE_CONTAINER){
+                    for(var resourceType in creep.carry) {
+                        creep.transfer(currTarget, resourceType);
+                    }
+                }
+                else if(creep.transfer(currTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(currTarget);
                 }
                 else {
