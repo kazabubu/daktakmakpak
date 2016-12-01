@@ -19,12 +19,7 @@ class AutoSpawn {
             }
         }
 
-        var controller = Game.getObjectById('577b93e70f9d51615fa48d85');
 
-        if (!controller.owner || _.isUndefined(controller.owner) || controller.owner.username !== 'aregaz'){
-            Game.spawns['Spawn1'].createCreep([CLAIM,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE]
-                ,'Claimer1',{role:'simpleClaimer'});
-        }
 
     }
 
