@@ -91,20 +91,24 @@ var roleSimpleClaimer = {
         }
         else if (creep.memory.currentState == STATE.ATTACKING) {
             if (!creep.memory.currentTarget || !creep.memory.currentPath) {
-                var targets = creep.room.find(FIND_HOSTILE_STRUCTURES,{
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_CONTROLLER);
-                    }});
+                /*var targets = creep.room.find(FIND_STRUCTURES,{
+                 filter: (structure) => {
+                 return (structure.structureType == STRUCTURE_CONTROLLER);
+                 }});
 
-                if (targets && targets.length > 0) {
-                    creep.memory.currentTarget = targets[0].id;
-                    creep.memory.currentPath = creep.room.findPath(creep.pos, targets[0].pos);
-                }
+                 if (targets && targets.length > 0) {
+                 creep.memory.currentTarget = targets[0].id;
+                 creep.memory.currentPath = creep.room.findPath(creep.pos, targets[0].pos);
+                 }*/
+                creep.memory.currentTarget = '577b93e70f9d51615fa48d85';
+
+                creep.memory.currentPath = creep.room.findPath(creep.pos, Game.getObjectById(creep.memory.currentTarget).pos);
             }
             var target = Game.getObjectById(creep.memory.currentTarget);
 
-
-            if(creep.attackController(target) == ERR_NOT_IN_RANGE){
+            var result = creep.claimController(target);
+            console.log(result);
+            if(result == ERR_NOT_IN_RANGE){
                 creep.moveByPath(creep.memory.currentPath);
             }
         }
