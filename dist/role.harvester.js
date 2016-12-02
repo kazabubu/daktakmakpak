@@ -97,7 +97,11 @@ var roleHarvester = {
             creep.memory.currentTarget = null;
         }
 
-        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
+        var currTotal = 0;
+        currTotal = getCurrTotalCarried(creep);
+
+
+        if(currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
 
 
             if (creep.memory.currentSource) {
@@ -143,13 +147,16 @@ var roleHarvester = {
                 creep.moveByPath(creep.memory.currentPath);
             }
 
-            if (creep.carry.energy == creep.carryCapacity)
+
+            currTotal = getCurrTotalCarried(creep);
+
+            if (currTotal == creep.carryCapacity)
             {
                 creep.memory.currentState = STATE.TRANSFER;
             }
 
         }
-        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.TRANSFER) {
+        else if (currTotal == creep.carryCapacity || creep.memory.currentState == STATE.TRANSFER) {
             creep.memory.currentState = STATE.TRANSFER;
             if (!creep.memory.currentTarget) {
                 var targets = creep.room.find(FIND_STRUCTURES, {
@@ -204,8 +211,9 @@ var roleHarvester = {
                     creep.memory.currentPath = null;
                 }
             }
+            currTotal = getCurrTotalCarried(creep);
 
-            if (creep.carry.energy < (creep.carryCapacity * 0.2 ))
+            if (currTotal < (creep.carryCapacity * 0.2 ))
             {
                 creep.memory.currentState = STATE.HARVEST;
                 creep.memory.currentPath = null;
@@ -213,6 +221,14 @@ var roleHarvester = {
                 creep.memory.prevPos = null;
                 creep.memory.currentResource = null;
             }
+        }
+
+        function getCurrTotalCarried(creep){
+            var currTotal = 0;
+            for(var resourceType in creep.carry) {
+                currTotal += creep.carry[resourceType];
+            }
+            return currTotal;
         }
 
         function getSourceToMine(creep)
