@@ -107,7 +107,6 @@ var roleSimpleClaimer = {
             var target = Game.getObjectById(creep.memory.currentTarget);
 
             var result = creep.claimController(target);
-            console.log(result);
             if(result == ERR_NOT_IN_RANGE){
                 creep.moveByPath(creep.memory.currentPath);
             }

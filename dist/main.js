@@ -6,6 +6,7 @@ var tower = require('tower');
 var autoSpawn = require('autoSpawn');
 var roleSimpleAttacker = require('role.simpleAttacker');
 var roleSimpleClaimer = require('role.simpleClaimer');
+var roleBuilderInter = require('role.builderInter');
 
 module.exports.loop = function () {
     preLoopSetup.setup();
@@ -25,6 +26,9 @@ module.exports.loop = function () {
         }
         if(creep.memory.role == 'simpleClaimer') {
             roleSimpleClaimer.run(creep);
+        }
+        if(creep.memory.role == 'builderInter') {
+            roleBuilderInter.run(creep);
         }
     }
 

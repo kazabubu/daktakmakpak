@@ -9,8 +9,7 @@ var roleHarvester = {
             STRUCTURE_STORAGE: 97,
             STRUCTURE_CONTAINER: 96
         }
-        console.log(a);
-        console.log(b);
+
         var aPriority = _.isUndefined(STRUCT_PRIORITY[a.structureType]) ? 0 : STRUCT_PRIORITY[a.structureType];
         var bPriority = _.isUndefined(STRUCT_PRIORITY[b.structureType]) ? 0 : STRUCT_PRIORITY[b.structureType];
 
