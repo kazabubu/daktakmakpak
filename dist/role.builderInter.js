@@ -127,7 +127,6 @@ var roleBuilder = {
 
                 if (target) {
                     var result = creep.build(target);
-                    console.log(result);
                     if (result == ERR_NOT_IN_RANGE) {
                         creep.moveTo(target);
                     }
