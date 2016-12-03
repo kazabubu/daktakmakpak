@@ -15,6 +15,12 @@ var roleUpgrader = {
             disable = true
         }
 
+        const DEFAULT_ROOM = 'E38N43'; //creep.memory.homeRoom
+
+        if (_.isUndefined(creep.memory.homeRoom) || !creep.memory.homeRoom){
+            creep.memory.homeRoom = DEFAULT_ROOM;
+        }
+
         if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentState = STATE.DIEING;
@@ -71,12 +77,12 @@ var roleUpgrader = {
 
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER && !disable) {
             var targets;
-            if (creep.room.name == 'E38N43'){
-                var storage = Game.getObjectById('582dbc756fba2bb555a17156');
-                if (!_.isUndefined(storage) && storage.store.energy > 1000){
-                    targets = [storage];
-                }
+
+            var storage = Game.getObjectById('582dbc756fba2bb555a17156');
+            if (!_.isUndefined(storage) && storage.store.energy > 1000){
+                targets = [storage];
             }
+
 
             if (_.isUndefined(targets)) {
                 targets = creep.room.find(FIND_STRUCTURES, {
@@ -96,7 +102,7 @@ var roleUpgrader = {
                     creep.moveTo(targets[0]);
                 }
         }
-        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.UPGRADE) {
+        else if ((creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.UPGRADE) && creep.room.name == creep.memory.homeRoom) {
             creep.memory.currentState = STATE.UPGRADE;
             if (!creep.memory.currentPath) {
                 creep.memory.currentPath = creep.room.findPath(creep.pos ,creep.room.controller.pos);
@@ -111,6 +117,19 @@ var roleUpgrader = {
                 creep.memory.currentState = STATE.TRANSFER;
             }
         }
+        else if ((creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.UPGRADE) && creep.room.name != creep.memory.homeRoom){
+            if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 1)) {
+                if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 1)) {
+                    if (_.isUndefined(creep.memory.currentPath) || !creep.memory.currentPath || creep.memory.currentPath.length == 0) {
+                        creep.memory.currentPath = creep.room.findPath(creep.pos, Game.flags['Flag1'].pos);
+                    }
+                    creep.moveByPath(creep.memory.currentPath);
+                }
+                creep.moveByPath(creep.memory.currentPath);
+            }
+        }
+
+
 
 
     }

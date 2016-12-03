@@ -32,6 +32,11 @@ var roleHarvester = {
         };
 
         const DEFAULT_STATE = STATE.HARVEST;
+        const DEFAULT_ROOM = 'E38N43'; //creep.memory.homeRoom
+
+        if (_.isUndefined(creep.memory.homeRoom) || !creep.memory.homeRoom){
+            creep.memory.homeRoom = DEFAULT_ROOM;
+        }
 
         if (creep.pos.y == 1){
             Game.notify(JSON.stringify(creep));
@@ -99,10 +104,16 @@ var roleHarvester = {
         var currTotal = 0;
         currTotal = getCurrTotalCarried(creep);
 
+        if (currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && creep.room.name != creep.memory.homeRoom){
+            if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 1)) {
+                if (_.isUndefined(creep.memory.currentPath) || !creep.memory.currentPath || creep.memory.currentPath.length == 0) {
 
-        if(currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
-
-
+                    creep.memory.currentPath = Game.rooms[creep.memory.homeRoom].findPath(creep.pos, Game.flags['Flag1'].pos);
+                }
+                creep.moveByPath(creep.memory.currentPath);
+            }
+        }
+        else if(currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && creep.room.name == creep.memory.homeRoom) {
             if (creep.memory.currentSource) {
                 var source = Game.getObjectById(creep.memory.currentSource);
             }
