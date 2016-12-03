@@ -108,7 +108,7 @@ var roleHarvester = {
             if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 1)) {
                 if (_.isUndefined(creep.memory.currentPath) || !creep.memory.currentPath || creep.memory.currentPath.length == 0) {
 
-                    creep.memory.currentPath = Game.rooms[creep.memory.homeRoom].findPath(creep.pos, Game.flags['Flag1'].pos);
+                    creep.memory.currentPath = creep.room.findPath(creep.pos, Game.flags['Flag1'].pos);
                 }
                 creep.moveByPath(creep.memory.currentPath);
             }
