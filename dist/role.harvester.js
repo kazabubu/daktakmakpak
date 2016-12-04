@@ -106,11 +106,11 @@ var roleHarvester = {
 
         if (currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && creep.room.name != creep.memory.homeRoom){
             if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 1)) {
-                if (_.isUndefined(creep.memory.currentPath) || !creep.memory.currentPath || creep.memory.currentPath.length == 0) {
-
-                    creep.memory.currentPath = creep.room.findPath(creep.pos, Game.flags['Flag1'].pos);
+                var result = creep.moveTo(Game.flags['Flag1'], {noPathFinding: true});
+                if (result == ERR_NO_PATH || result == ERR_NOT_FOUND){
+                    creep.moveTo(Game.flags['Flag1']);
                 }
-                creep.moveByPath(creep.memory.currentPath);
+
             }
         }
         else if(currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && creep.room.name == creep.memory.homeRoom) {
