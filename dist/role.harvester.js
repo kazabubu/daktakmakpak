@@ -1,4 +1,26 @@
+"use strict";
 var roleHarvester = {
+
+    structurePrioratyCompare: function (a, b) {
+        const STRUCT_PRIORITY = {
+            STRUCTURE_TOWER: 100,
+            STRUCTURE_SPAWN: 99,
+            STRUCTURE_EXTENSION: 98,
+            STRUCTURE_STORAGE: 97,
+            STRUCTURE_CONTAINER: 96
+        }
+
+        var aPriority = _.isUndefined(STRUCT_PRIORITY[a.structureType]) ? 0 : STRUCT_PRIORITY[a.structureType];
+        var bPriority = _.isUndefined(STRUCT_PRIORITY[b.structureType]) ? 0 : STRUCT_PRIORITY[b.structureType];
+
+        if (aPriority < bPriority) {
+            return -1;
+        }
+        if (aPriority > bPriority) {
+            return 1;
+        }
+        return 0;
+    },
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -10,6 +32,11 @@ var roleHarvester = {
         };
 
         const DEFAULT_STATE = STATE.HARVEST;
+        const DEFAULT_ROOM = 'E38N43'; //creep.memory.homeRoom
+
+        if (_.isUndefined(creep.memory.homeRoom) || !creep.memory.homeRoom){
+            creep.memory.homeRoom = DEFAULT_ROOM;
+        }
 
         if (creep.pos.y == 1){
             Game.notify(JSON.stringify(creep));
@@ -74,9 +101,19 @@ var roleHarvester = {
             creep.memory.currentTarget = null;
         }
 
-        if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST) {
+        var currTotal = 0;
+        currTotal = getCurrTotalCarried(creep);
 
+        if (currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && creep.room.name != creep.memory.homeRoom){
+            if (!creep.pos.inRangeTo(Game.flags['Flag1'].pos, 1)) {
+                if (_.isUndefined(creep.memory.currentPath) || !creep.memory.currentPath || creep.memory.currentPath.length == 0) {
 
+                    creep.memory.currentPath = creep.room.findPath(creep.pos, Game.flags['Flag1'].pos);
+                }
+                creep.moveByPath(creep.memory.currentPath);
+            }
+        }
+        else if(currTotal < creep.carryCapacity && creep.memory.currentState == STATE.HARVEST && creep.room.name == creep.memory.homeRoom) {
             if (creep.memory.currentSource) {
                 var source = Game.getObjectById(creep.memory.currentSource);
             }
@@ -87,13 +124,10 @@ var roleHarvester = {
                 }
                 else {
                     var sources = creep.room.find(FIND_SOURCES);
-                    if (sources && sources.length > 2){
-                        Game.notify("got more than a single resource:" + JSON.stringify(sources));
-                    }
                     if (sources && sources.length > 0 && typeof creep.ticksToLive != "undefined") {                        
                         creep.memory.currentSource = sources[creep.ticksToLive % sources.length].id;
                     }
-                    //creep.memory.currentSource = getSourceToMine(creep);
+
                 }
             }
 
@@ -117,19 +151,22 @@ var roleHarvester = {
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 if (!creep.memory.currentPath){
                     source = Game.getObjectById(creep.memory.currentSource);
-                    creep.memory.currentPath = creep.room.findPath(creep.pos , source.pos);
+                    creep.memory.currentPath = creep.room.findPath(creep.pos , source.pos, {"maxRooms" : 1});
                 }
 
                 creep.moveByPath(creep.memory.currentPath);
             }
 
-            if (creep.carry.energy == creep.carryCapacity)
+
+            currTotal = getCurrTotalCarried(creep);
+
+            if (currTotal == creep.carryCapacity)
             {
                 creep.memory.currentState = STATE.TRANSFER;
             }
 
         }
-        else if (creep.carry.energy == creep.carryCapacity || creep.memory.currentState == STATE.TRANSFER) {
+        else if (currTotal == creep.carryCapacity || creep.memory.currentState == STATE.TRANSFER) {
             creep.memory.currentState = STATE.TRANSFER;
             if (!creep.memory.currentTarget) {
                 var targets = creep.room.find(FIND_STRUCTURES, {
@@ -142,12 +179,41 @@ var roleHarvester = {
                             (typeof structure.store !== 'undefined' && structure.store.energy < structure.storeCapacity));
                     }
                 });
+
+                // sorting descending order by priority
+                 targets.sort(function (a, b) {
+                    var STRUCT_PRIORITY = {
+                        [STRUCTURE_SPAWN]: 100,
+                        [STRUCTURE_TOWER]: 99,
+                        [STRUCTURE_EXTENSION]: 98,
+                        [STRUCTURE_STORAGE]: 97,
+                        [STRUCTURE_CONTAINER]: 96
+                    }
+
+
+                    var aPriority = _.isUndefined(STRUCT_PRIORITY[a.structureType]) ? 0 : STRUCT_PRIORITY[a.structureType];
+                    var bPriority = _.isUndefined(STRUCT_PRIORITY[b.structureType]) ? 0 : STRUCT_PRIORITY[b.structureType];
+
+                    if (aPriority > bPriority) {
+                        return -1;
+                    }
+                    if (aPriority < bPriority) {
+                        return 1;
+                    }
+                    return 0;
+                });
+
                 creep.memory.currentTarget = targets.length > 0 ? targets[0].id : null;
             }
 
             if(!!creep.memory.currentTarget) {
                 var currTarget = Game.getObjectById(creep.memory.currentTarget);
-                if(creep.transfer(currTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if (currTarget.structureType == STRUCTURE_CONTAINER){
+                    for(var resourceType in creep.carry) {
+                        creep.transfer(currTarget, resourceType);
+                    }
+                }
+                else if(creep.transfer(currTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(currTarget);
                 }
                 else {
@@ -155,8 +221,9 @@ var roleHarvester = {
                     creep.memory.currentPath = null;
                 }
             }
+            currTotal = getCurrTotalCarried(creep);
 
-            if (creep.carry.energy < (creep.carryCapacity * 0.2 ))
+            if (currTotal < (creep.carryCapacity * 0.2 ))
             {
                 creep.memory.currentState = STATE.HARVEST;
                 creep.memory.currentPath = null;
@@ -164,6 +231,14 @@ var roleHarvester = {
                 creep.memory.prevPos = null;
                 creep.memory.currentResource = null;
             }
+        }
+
+        function getCurrTotalCarried(creep){
+            var currTotal = 0;
+            for(var resourceType in creep.carry) {
+                currTotal += creep.carry[resourceType];
+            }
+            return currTotal;
         }
 
         function getSourceToMine(creep)

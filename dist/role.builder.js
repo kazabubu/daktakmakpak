@@ -16,7 +16,7 @@ var roleBuilder = {
         const DEFAULT_STATE = STATE.HARVEST;
 
         var disable = false;
-        if (Memory.dyingCount[creep.room.name].count >= 3) {
+        if (!_.isUndefined(Memory.dyingCount) && !!Memory.dyingCount[creep.room.name] && Memory.dyingCount[creep.room.name].count >= 3) {
             disable = true
         }
 
@@ -126,7 +126,7 @@ var roleBuilder = {
                 var target = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return ((structure.hits <= (structure.hitsMax * 0.3) && structure.structureType !== STRUCTURE_WALL
-                        && structure.structureType !== STRUCTURE_RAMPART) ||
+                        && structure.structureType !== STRUCTURE_RAMPART && structure.structureType !== STRUCTURE_CONTROLLER) ||
                         ((structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) && structure.hits <= 2000000))
 
 
@@ -141,7 +141,7 @@ var roleBuilder = {
                 var currentTarget = Game.getObjectById(creep.memory.currentTarget);
 
                 if (currentTarget != null && (currentTarget.hits <= (currentTarget.hitsMax * 0.3) &&
-                    currentTarget.structureType !== STRUCTURE_WALL && currentTarget !== STRUCTURE_RAMPART )
+                    currentTarget.structureType !== STRUCTURE_WALL && currentTarget.structureType !== STRUCTURE_RAMPART && currentTarget.structureType !== STRUCTURE_CONTROLLER)
                     || ((currentTarget.structureType == STRUCTURE_WALL || currentTarget.structureType == STRUCTURE_RAMPART )&& currentTarget.hits <= 2000000))
                 {
 
