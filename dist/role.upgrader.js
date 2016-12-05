@@ -78,9 +78,18 @@ var roleUpgrader = {
         if(creep.carry.energy < creep.carryCapacity && creep.memory.currentState == STATE.TRANSFER && !disable) {
             var targets;
 
-            var storage = Game.getObjectById('582dbc756fba2bb555a17156');
-            if (!_.isUndefined(storage) && storage.store.energy > 1000){
-                targets = [storage];
+
+            if(creep.room.name == 'E38N43'){
+                var storage = Game.getObjectById('582dbc756fba2bb555a17156');
+                if (!_.isUndefined(storage) && storage.store.energy > 1000){
+                    targets = [storage];
+                }
+            }
+            else if(creep.room.name == 'E38N44'){
+                var storage = Game.getObjectById('58443675f5534df763bb860a');
+                if (!_.isUndefined(storage) && storage.store.energy > 0){
+                    targets = [storage];
+                }
             }
 
 
