@@ -140,9 +140,9 @@ var roleBuilder = {
             if(creep.memory.currentTarget) {
                 var currentTarget = Game.getObjectById(creep.memory.currentTarget);
 
-                if (currentTarget != null && (currentTarget.hits <= (currentTarget.hitsMax * 0.3) &&
+                if (currentTarget != null && ((currentTarget.hits <= (currentTarget.hitsMax * 0.3) &&
                     currentTarget.structureType !== STRUCTURE_WALL && currentTarget.structureType !== STRUCTURE_RAMPART && currentTarget.structureType !== STRUCTURE_CONTROLLER)
-                    || ((currentTarget.structureType == STRUCTURE_WALL || currentTarget.structureType == STRUCTURE_RAMPART )&& currentTarget.hits <= 2000000))
+                    || ((currentTarget.structureType == STRUCTURE_WALL || currentTarget.structureType == STRUCTURE_RAMPART )&& currentTarget.hits <= 2000000)))
                 {
 
                     var result = creep.repair(currentTarget);
