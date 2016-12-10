@@ -38,16 +38,6 @@ var roleHarvester = {
             creep.memory.homeRoom = DEFAULT_ROOM;
         }
 
-        if (creep.pos.y == 1){
-            Game.notify(JSON.stringify(creep));
-            Game.notify("leaving:  " + JSON.stringify(creep.memory.currentState));
-            Game.notify("path: " + JSON.stringify(creep.memory.currentPath));
-            Game.notify("source: " + JSON.stringify(creep.memory.currentSource));
-            Game.notify("resource:" + JSON.stringify(creep.memory.currentResource));
-            Game.notify("target:" + JSON.stringify(creep.memory.currentTarget));
-
-        }
-
         if (creep.ticksToLive < 150 && creep.memory.currentState !== STATE.DIEING)
         {
             creep.memory.currentState = STATE.DIEING;
